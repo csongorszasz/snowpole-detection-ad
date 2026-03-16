@@ -112,7 +112,7 @@ class ImagePathDataset(Dataset):
         return self.tfm(img), str(p)
 
 
-def build_resnet152_embedder(device: str | None = None):
+def build_resnet_embedder(device: str | None = None):
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -125,6 +125,30 @@ def build_resnet152_embedder(device: str | None = None):
 
     return backbone, tfm, device
 
+def build_vit_embedder(device: str | None = None):
+    if device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    weights = models.ViT_B_16_Weights.IMAGENET1K_V1
+    tfm = weights.transforms()
+
+    backbone = models.vit_b_16(weights=weights)
+    backbone.heads = torch.nn.Identity()  # 768-d embedding
+    backbone = backbone.to(device).eval()
+
+    return backbone, tfm, device
+
+def build_embedder(
+    embedding_type: str,
+    device: str | None = None,
+):
+    emb_type_to_embedding_fn = {
+        "resnet": build_resnet_embedder,
+        "vit": build_vit_embedder,
+    }
+    if embedding_type not in emb_type_to_embedding_fn:
+        raise ValueError(f"Unsupported embedding_type '{embedding_type}'. Supported types: {list(emb_type_to_embedding_fn.keys())}")
+    return emb_type_to_embedding_fn[embedding_type](device=device)
 
 @torch.no_grad()
 def extract_embeddings(
@@ -135,9 +159,6 @@ def extract_embeddings(
     batch_size: int = 64,
     num_workers: int = 2,
 ):
-    if len(paths) == 0:
-        return np.empty((0, 2048), dtype=np.float32), []
-
     ds = ImagePathDataset(paths, tfm)
     dl = DataLoader(ds, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
@@ -214,6 +235,7 @@ def score_splits_map(
 def run_anomaly_workflow(
     subset_dir: Path,
     split_to_images_dir: dict[str, str],
+    embedding_type: str = "resnet",
     train_split: str = "train",
     device: str | None = None,
     batch_size: int = 64,
@@ -240,7 +262,7 @@ def run_anomaly_workflow(
         ])
     )
 
-    backbone, tfm, device = build_resnet152_embedder(device=device)
+    backbone, tfm, device = build_embedder(embedding_type, device=device)
     print("device:", device)
 
     embeddings_by_split: dict[str, np.ndarray] = {}

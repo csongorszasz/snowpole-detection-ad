@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from io import BytesIO
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
@@ -150,26 +151,58 @@ def build_embedder(
         raise ValueError(f"Unsupported embedding_type '{embedding_type}'. Supported types: {list(emb_type_to_embedding_fn.keys())}")
     return emb_type_to_embedding_fn[embedding_type](device=device)
 
+
+@dataclass(frozen=True)
+class EmbeddingExtractor:
+    backbone: torch.nn.Module
+    tfm: object
+    device: str
+
+    @torch.no_grad()
+    def extract(
+        self,
+        paths: list[Path],
+        batch_size: int = 64,
+        num_workers: int = 1,
+    ):
+        ds = ImagePathDataset(paths, self.tfm)
+        dl = DataLoader(ds, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+
+        embs, out_paths = [], []
+        for xb, pb in tqdm(dl, total=len(dl)):
+            xb = xb.to(self.device)
+            z = self.backbone(xb)
+            embs.append(z.cpu().numpy())
+            out_paths.extend(pb)
+
+        return np.vstack(embs), out_paths
+
+
+def build_embedding_extractor(
+    embedding_type: str,
+    device: str | None = None,
+) -> EmbeddingExtractor:
+    backbone, tfm, device = build_embedder(embedding_type=embedding_type, device=device)
+    return EmbeddingExtractor(backbone=backbone, tfm=tfm, device=device)
+
 @torch.no_grad()
 def extract_embeddings(
     paths: list[Path],
-    backbone,
-    tfm,
-    device: str,
+    backbone=None,
+    tfm=None,
+    device: str | None = None,
+    extractor: EmbeddingExtractor | None = None,
     batch_size: int = 64,
     num_workers: int = 2,
 ):
-    ds = ImagePathDataset(paths, tfm)
-    dl = DataLoader(ds, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    if extractor is not None:
+        return extractor.extract(paths, batch_size=batch_size, num_workers=num_workers)
 
-    embs, out_paths = [], []
-    for xb, pb in tqdm(dl, total=len(dl)):
-        xb = xb.to(device)
-        z = backbone(xb)
-        embs.append(z.cpu().numpy())
-        out_paths.extend(pb)
+    if backbone is None or tfm is None or device is None:
+        raise ValueError("Provide either `extractor` or (`backbone`, `tfm`, and `device`).")
 
-    return np.vstack(embs), out_paths
+    compat_extractor = EmbeddingExtractor(backbone=backbone, tfm=tfm, device=device)
+    return compat_extractor.extract(paths, batch_size=batch_size, num_workers=num_workers)
 
 
 def fit_isolation_forest(
@@ -262,8 +295,8 @@ def run_anomaly_workflow(
         ])
     )
 
-    backbone, tfm, device = build_embedder(embedding_type, device=device)
-    print("device:", device)
+    extractor = build_embedding_extractor(embedding_type=embedding_type, device=device)
+    print("device:", extractor.device)
 
     embeddings_by_split: dict[str, np.ndarray] = {}
     string_paths_by_split: dict[str, list[str]] = {}
@@ -271,9 +304,7 @@ def run_anomaly_workflow(
     for split, paths in paths_by_split.items():
         X, P = extract_embeddings(
             paths,
-            backbone=backbone,
-            tfm=tfm,
-            device=device,
+            extractor=extractor,
             batch_size=batch_size,
             num_workers=num_workers,
         )
@@ -303,9 +334,10 @@ def run_anomaly_workflow(
     return {
         "iso": iso,
         "df": df,
-        "device": device,
-        "backbone": backbone,
-        "tfm": tfm,
+        "device": extractor.device,
+        "backbone": extractor.backbone,
+        "tfm": extractor.tfm,
+        "extractor": extractor,
         "embeddings_by_split": embeddings_by_split,
         "paths_by_split": string_paths_by_split,
     }

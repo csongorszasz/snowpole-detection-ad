@@ -1,0 +1,6 @@
+model: yolo26n.pt
+data: dataset/Poles2025/data_joint.yaml
+epochs: 20
+imgsz: 1088
+batch: -1
+device: 0

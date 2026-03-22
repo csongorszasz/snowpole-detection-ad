@@ -1,0 +1,19 @@
+model: runs/detect/train23/weights/best.pt
+source: dataset/Poles2025/roadpoles_v1/test/images/
+batch: 1
+imgsz: 1088
+device: 0
+save_txt: true
+save_conf: true
+save_crop: true
+save: true
+preprocess:
+  mask:
+    dashboard:
+      enabled: true
+      mode: polygon
+      points: [[0.0, 0.9], [0.0, 1.0], [1.0, 1.0], [0.57, 0.65], [0.45, 0.65], [0.0, 0.87]]
+    sky:
+      enabled: true
+      horizon_ratio: 0.4
+  

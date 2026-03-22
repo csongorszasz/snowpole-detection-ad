@@ -63,15 +63,13 @@ def _apply_dashboard_mask(img: np.ndarray, mask_cfg: dict) -> np.ndarray:
         if not isinstance(points, list) or len(points) < 3:
             raise ValueError("'points' is required for polygon mode and must have at least 3 points")
 
-        normalized = bool(mask_cfg.get("normalized", True))
         poly = []
         for p in points:
             if not isinstance(p, (list, tuple)) or len(p) != 2:
                 raise ValueError("Each polygon point must be [x, y]")
             x, y = float(p[0]), float(p[1])
-            if normalized:
-                x = x * w
-                y = y * h
+            x = x * w
+            y = y * h
             poly.append([int(round(x)), int(round(y))])
 
         poly_np = np.array([poly], dtype=np.int32)

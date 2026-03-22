@@ -15,5 +15,5 @@ preprocess:
       points: [[0.0, 0.9], [0.0, 1.0], [1.0, 1.0], [0.57, 0.65], [0.45, 0.65], [0.0, 0.87]]
     sky:
       enabled: true
-      horizon_ratio: 0.4
+      horizon_ratio: 0.5
   

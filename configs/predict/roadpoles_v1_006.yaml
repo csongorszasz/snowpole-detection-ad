@@ -1,0 +1,14 @@
+model: runs/detect/train23/weights/best.pt
+source: dataset/Poles2025/roadpoles_v1/test/images/
+batch: 1
+imgsz: 1088
+device: 0
+save_txt: true
+save_conf: true
+save_crop: true
+save: true
+preprocess:
+  dashboard_mask:
+    enabled: true
+    mode: rectangle
+    top_ratio: 0.90

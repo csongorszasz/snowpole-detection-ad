@@ -3,6 +3,7 @@ import argparse
 import yaml
 
 from ultralytics import YOLO
+from preprocess import prepare_preprocessed_data_yaml
 
 
 def main():
@@ -31,6 +32,12 @@ def main():
 
 	train_args = dict(cfg)
 	train_args.pop("model", None)
+	preprocess_cfg = train_args.pop("preprocess", {})
+	if preprocess_cfg is None:
+		preprocess_cfg = {}
+	if not isinstance(preprocess_cfg, dict):
+		raise ValueError("'preprocess' must be a mapping/object if provided")
+
 	if "data" not in train_args:
 		raise ValueError("Config must include 'data'")
 
@@ -42,7 +49,18 @@ def main():
 		raise FileNotFoundError(f"data.yaml not found: {data}")
 
 	model = YOLO(model_path)
-	model.train(**train_args)
+	temp_dir = None
+	try:
+		new_data, temp_dir = prepare_preprocessed_data_yaml(
+			data,
+			preprocess_cfg,
+			temp_prefix="train_preprocessed_"
+		)
+		train_args["data"] = new_data
+		model.train(**train_args)
+	finally:
+		if temp_dir is not None:
+			temp_dir.cleanup()
 
 
 if __name__ == "__main__":

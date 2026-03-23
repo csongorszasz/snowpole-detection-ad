@@ -2,6 +2,8 @@ dataset/Poles2025/*
 !dataset/Poles2025/*.yml
 !dataset/Poles2025/*.yaml
 
+.vscode
+
 __pycache__/
 *.pyc
 

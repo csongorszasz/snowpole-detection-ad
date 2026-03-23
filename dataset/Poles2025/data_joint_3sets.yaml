@@ -1,0 +1,14 @@
+train: 
+  - roadpoles_v1/train/images
+  - Road_poles_iPhone/images/Train/train
+  - RoadPoles-MSJ-split/train/images
+val: 
+  - roadpoles_v1/valid/images
+  - Road_poles_iPhone/images/Validation/val
+  - RoadPoles-MSJ-split/valid/images
+test: 
+  - roadpoles_v1/test/images
+  - Road_poles_iPhone/images/Test/test
+
+nc: 1
+names: ['pole']

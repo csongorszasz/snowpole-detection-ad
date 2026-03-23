@@ -7,4 +7,8 @@ dataset/Poles2025/*
 __pycache__/
 *.pyc
 
-runs/ # training/inference runs
+# training/inference runs
+runs/
+
+# pretrained models
+yolo*.pt

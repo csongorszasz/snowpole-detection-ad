@@ -1,3 +1,8 @@
 dataset/Poles2025/*
 !dataset/Poles2025/*.yml
 !dataset/Poles2025/*.yaml
+
+__pycache__/
+*.pyc
+
+runs/ # training/inference runs

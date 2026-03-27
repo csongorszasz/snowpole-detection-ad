@@ -1,0 +1,146 @@
+(.venv) clab06:/work/csongors/snowpole-detection-ad$ python train.py -c configs/train/joint_003_test.yaml
+[codecarbon WARNING @ 17:18:05] Multiple instances of codecarbon are allowed to run at the same time.
+[codecarbon INFO @ 17:18:05] [setup] RAM Tracking...
+[codecarbon INFO @ 17:18:05] [setup] CPU Tracking...
+[codecarbon WARNING @ 17:18:05]         RAPL - Permission denied reading RAPL file /sys/class/powercap/intel-rapl/subsystem/intel-rapl/intel-rapl:0/energy_uj. You can grant read permission with: sudo chmod -R a+r /sys/class/powercap/*
+[codecarbon WARNING @ 17:18:06] No CPU tracking mode found. Falling back on estimation based on TDP for CPU. 
+ Linux OS detected: Please ensure RAPL files exist, and are readable, at /sys/class/powercap/intel-rapl/subsystem to measure CPU
+
+[codecarbon INFO @ 17:18:06] CPU Model on constant consumption mode: AMD Ryzen 9 7900X 12-Core Processor
+[codecarbon WARNING @ 17:18:06] No CPU tracking mode found. Falling back on CPU load mode.
+[codecarbon INFO @ 17:18:06] [setup] GPU Tracking...
+[codecarbon INFO @ 17:18:06] Tracking Nvidia GPUs via PyNVML
+[codecarbon INFO @ 17:18:06] The below tracking methods have been set up:
+                RAM Tracking Method: RAM power estimation model
+                CPU Tracking Method: cpu_load
+                GPU Tracking Method: pynvml
+            
+[codecarbon INFO @ 17:18:06] >>> Tracker's metadata:
+[codecarbon INFO @ 17:18:06]   Platform system: Linux-6.8.0-106-generic-x86_64-with-glibc2.39
+[codecarbon INFO @ 17:18:06]   Python version: 3.12.3
+[codecarbon INFO @ 17:18:06]   CodeCarbon version: 3.2.5
+[codecarbon INFO @ 17:18:06]   Available RAM : 61.963 GB
+[codecarbon INFO @ 17:18:06]   CPU count: 24 thread(s) in 1 physical CPU(s)
+[codecarbon INFO @ 17:18:06]   CPU model: AMD Ryzen 9 7900X 12-Core Processor
+[codecarbon INFO @ 17:18:06]   GPU count: 1
+[codecarbon INFO @ 17:18:06]   GPU model: 1 x NVIDIA GeForce RTX 4090
+[codecarbon INFO @ 17:18:08] Emissions data (if any) will be saved to file /tmp/emissions_tracker_kkkvyj4v/emissions.csv
+Ultralytics 8.4.30 🚀 Python-3.12.3 torch-2.7.1+cu118 CUDA:0 (NVIDIA GeForce RTX 4090, 24058MiB)
+engine/trainer: agnostic_nms=False, amp=True, angle=1.0, augment=False, auto_augment=randaugment, batch=-1, bgr=0.0, box=7.5, cache=False, cfg=None, classes=None, close_mosaic=10, cls=0.5, compile=False, conf=None, copy_paste=0.0, copy_paste_mode=flip, cos_lr=False, cutmix=0.0, data=dataset/Poles2025/data_joint_2sets.yaml, degrees=0.0, deterministic=True, device=0, dfl=1.5, dnn=False, dropout=0.0, dynamic=False, embed=None, end2end=None, epochs=2, erasing=0.4, exist_ok=False, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, half=False, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, imgsz=640, int8=False, iou=0.7, keras=False, kobj=1.0, line_width=None, lr0=0.01, lrf=0.01, mask_ratio=4, max_det=300, mixup=0.0, mode=train, model=yolo26n.pt, momentum=0.937, mosaic=1.0, multi_scale=0.0, name=train6, nbs=64, nms=False, opset=None, optimize=False, optimizer=auto, overlap_mask=True, patience=100, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=None, rect=False, resume=False, retina_masks=False, rle=1.0, save=True, save_conf=False, save_crop=False, save_dir=/work/csongors/snowpole-detection-ad/runs/detect/train6, save_frames=False, save_json=False, save_period=-1, save_txt=False, scale=0.5, seed=0, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=detect, time=None, tracker=botsort.yaml, translate=0.1, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=3.0, warmup_momentum=0.8, weight_decay=0.0005, workers=8, workspace=None
+Overriding model.yaml nc=80 with nc=1
+
+                   from  n    params  module                                       arguments                     
+  0                  -1  1       464  ultralytics.nn.modules.conv.Conv             [3, 16, 3, 2]                 
+  1                  -1  1      4672  ultralytics.nn.modules.conv.Conv             [16, 32, 3, 2]                
+  2                  -1  1      6640  ultralytics.nn.modules.block.C3k2            [32, 64, 1, False, 0.25]      
+  3                  -1  1     36992  ultralytics.nn.modules.conv.Conv             [64, 64, 3, 2]                
+  4                  -1  1     26080  ultralytics.nn.modules.block.C3k2            [64, 128, 1, False, 0.25]     
+  5                  -1  1    147712  ultralytics.nn.modules.conv.Conv             [128, 128, 3, 2]              
+  6                  -1  1     87040  ultralytics.nn.modules.block.C3k2            [128, 128, 1, True]           
+  7                  -1  1    295424  ultralytics.nn.modules.conv.Conv             [128, 256, 3, 2]              
+  8                  -1  1    346112  ultralytics.nn.modules.block.C3k2            [256, 256, 1, True]           
+  9                  -1  1    164608  ultralytics.nn.modules.block.SPPF            [256, 256, 5, 3, True]        
+ 10                  -1  1    249728  ultralytics.nn.modules.block.C2PSA           [256, 256, 1]                 
+ 11                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
+ 12             [-1, 6]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 13                  -1  1    119808  ultralytics.nn.modules.block.C3k2            [384, 128, 1, True]           
+ 14                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
+ 15             [-1, 4]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 16                  -1  1     34304  ultralytics.nn.modules.block.C3k2            [256, 64, 1, True]            
+ 17                  -1  1     36992  ultralytics.nn.modules.conv.Conv             [64, 64, 3, 2]                
+ 18            [-1, 13]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 19                  -1  1     95232  ultralytics.nn.modules.block.C3k2            [192, 128, 1, True]           
+ 20                  -1  1    147712  ultralytics.nn.modules.conv.Conv             [128, 128, 3, 2]              
+ 21            [-1, 10]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 22                  -1  1    463104  ultralytics.nn.modules.block.C3k2            [384, 256, 1, True, 0.5, True]
+ 23        [16, 19, 22]  1    241566  ultralytics.nn.modules.head.Detect           [1, 1, True, [64, 128, 256]]  
+YOLO26n summary: 260 layers, 2,504,190 parameters, 2,504,190 gradients, 5.8 GFLOPs
+
+Transferred 606/708 items from pretrained weights
+AMP: running Automatic Mixed Precision (AMP) checks...
+AMP: checks passed ✅
+train: Fast image access ✅ (ping: 0.0±0.0 ms, read: 9176.5±1312.2 MB/s, size: 1145.7 KB)
+train: Scanning /work/datasets/tdt4265/Poles2025/Road_poles_iPhone/labels/Train/train... 1264 images, 0 backgrounds, 0 corrupt: 100% ━━━━━━━━━━━━ 1264/1264 1.4Kit/s 0.9s
+WARNING ⚠️ train: Cache directory /work/datasets/tdt4265/Poles2025/Road_poles_iPhone/labels/Train is not writable, cache not saved.
+AutoBatch: Computing optimal batch size for imgsz=640 at 60.0% CUDA memory utilization.
+AutoBatch: CUDA:0 (NVIDIA GeForce RTX 4090) 23.49G total, 0.09G reserved, 0.06G allocated, 23.35G free
+      Params      GFLOPs  GPU_mem (GB)  forward (ms) backward (ms)                   input                  output
+     2504190       5.772         0.461         18.13           nan        (1, 3, 640, 640)                    list
+     2504190       11.54         1.007         14.36           nan        (2, 3, 640, 640)                    list
+     2504190       23.09         1.764         14.06           nan        (4, 3, 640, 640)                    list
+     2504190       46.17         3.246         15.71           nan        (8, 3, 640, 640)                    list
+     2504190       92.35         6.239         18.23           nan       (16, 3, 640, 640)                    list
+     2504190       184.7        11.914         36.55           nan       (32, 3, 640, 640)                    list
+     2504190       369.4        22.955         49.26           nan       (64, 3, 640, 640)                    list
+AutoBatch: Using batch-size 38 for CUDA:0 14.01G/23.49G (60%) ✅
+train: Fast image access ✅ (ping: 0.0±0.0 ms, read: 7424.4±664.8 MB/s, size: 1036.2 KB)
+train: Scanning /work/datasets/tdt4265/Poles2025/Road_poles_iPhone/labels/Train/train... 1264 images, 0 backgrounds, 0 corrupt: 100% ━━━━━━━━━━━━ 1264/1264 1.2Kit/s 1.0s
+WARNING ⚠️ train: Cache directory /work/datasets/tdt4265/Poles2025/Road_poles_iPhone/labels/Train is not writable, cache not saved.
+val: Fast image access ✅ (ping: 0.0±0.0 ms, read: 3497.1±3250.0 MB/s, size: 1122.7 KB)
+val: Scanning /work/datasets/tdt4265/Poles2025/Road_poles_iPhone/labels/Validation/val... 353 images, 0 backgrounds, 0 corrupt: 100% ━━━━━━━━━━━━ 353/353 1.3Kit/s 0.3s
+WARNING ⚠️ val: Cache directory /work/datasets/tdt4265/Poles2025/Road_poles_iPhone/labels/Validation is not writable, cache not saved.
+optimizer: 'optimizer=auto' found, ignoring 'lr0=0.01' and 'momentum=0.937' and determining best 'optimizer', 'lr0' and 'momentum' automatically... 
+optimizer: AdamW(lr=0.002, momentum=0.9) with parameter groups 114 weight(decay=0.0), 126 weight(decay=0.00059375), 126 bias(decay=0.0)
+WARNING ⚠️ Can not load face (invalid stream operation; error code 0x55)
+Image sizes 640 train, 640 val
+Using 8 dataloader workers
+Logging results to /work/csongors/snowpole-detection-ad/runs/detect/train6
+Starting training for 2 epochs...
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+        1/2      5.68G      2.792      11.01   0.004384         76        640: 68% ━━━━━━━━──── 23/34 9.4it/s 8.3s<1.2s[codecarbon INFO @ 17:18:24] Energy consumed for RAM : 0.000089 kWh. RAM Power : 20.0 W
+        1/2      5.68G      2.676      10.42   0.004154         74        640: 82% ━━━━━━━━━╸── 28/34 9.5it/s 8.8s<0.6s[codecarbon INFO @ 17:18:25] Delta energy consumed for CPU with cpu_load : 0.000301 kWh, power : 67.67871943100002 W
+[codecarbon INFO @ 17:18:25] Energy consumed for All CPU : 0.000301 kWh
+[codecarbon INFO @ 17:18:25] Monitoring GPUs with indices: [0] out of 1 total GPUs
+[codecarbon INFO @ 17:18:25] Energy consumed for all GPUs : 0.000408 kWh. Total GPU Power : 88.92999161071045 W
+[codecarbon INFO @ 17:18:25] 0.000797 kWh of electricity and 0.000000 L of water were used since the beginning.
+        1/2      5.68G      2.582      9.935   0.003989         16        640: 100% ━━━━━━━━━━━━ 34/34 3.6it/s 9.4s
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 5/5 10.2it/s 0.5s
+                   all        353        443    0.00205       0.49    0.00157   0.000717
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+        2/2      6.45G      2.027      5.811   0.002584         25        640: 100% ━━━━━━━━━━━━ 34/34 9.6it/s 3.5s
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 5/5 14.8it/s 0.3s
+                   all        353        443    0.00347      0.828      0.343      0.136
+
+2 epochs completed in 0.004 hours.
+Optimizer stripped from /work/csongors/snowpole-detection-ad/runs/detect/train6/weights/last.pt, 5.4MB
+Optimizer stripped from /work/csongors/snowpole-detection-ad/runs/detect/train6/weights/best.pt, 5.4MB
+
+Validating /work/csongors/snowpole-detection-ad/runs/detect/train6/weights/best.pt...
+Ultralytics 8.4.30 🚀 Python-3.12.3 torch-2.7.1+cu118 CUDA:0 (NVIDIA GeForce RTX 4090, 24058MiB)
+YOLO26n summary (fused): 122 layers, 2,375,031 parameters, 0 gradients, 5.2 GFLOPs
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 5/5 9.0it/s 0.6s
+Traceback (most recent call last):
+  File "/work/csongors/snowpole-detection-ad/train.py", line 97, in <module>
+    main()
+  File "/work/csongors/snowpole-detection-ad/train.py", line 73, in main
+    model.train(**train_args)
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/engine/model.py", line 788, in train
+    self.trainer.train()
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/engine/trainer.py", line 244, in train
+    self._do_train()
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/engine/trainer.py", line 561, in _do_train
+    self.final_eval()
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/engine/trainer.py", line 833, in final_eval
+    self.metrics = self.validator(model=model)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/engine/validator.py", line 241, in __call__
+    stats = self.get_stats()
+            ^^^^^^^^^^^^^^^^
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/models/yolo/detect/val.py", line 250, in get_stats
+    self.metrics.process(save_dir=self.save_dir, plot=self.args.plots, on_plot=self.on_plot)
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/utils/metrics.py", line 1077, in process
+    results = ap_per_class(
+              ^^^^^^^^^^^^^
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/utils/metrics.py", line 834, in ap_per_class
+    plot_pr_curve(x, prec_values, ap, save_dir / f"{prefix}PR_curve.png", names, on_plot=on_plot)
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/ultralytics/utils/__init__.py", line 382, in wrapper
+    font_manager.fontManager.addfont(str(f))
+  File "/work/csongors/snowpole-detection-ad/.venv/lib/python3.12/site-packages/matplotlib/font_manager.py", line 1136, in addfont
+    font = ft2font.FT2Font(path)
+           ^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Can not load face (invalid stream operation; error code 0x55)

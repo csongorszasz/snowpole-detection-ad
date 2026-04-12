@@ -2,6 +2,9 @@ dataset/Poles2025/*
 !dataset/Poles2025/*.yml
 !dataset/Poles2025/*.yaml
 
+!dataset/Poles2025/Road_poles_iPhone/*.yaml
+!dataset/Poles2025/Road_poles_iPhone/*.txt
+
 .vscode
 
 __pycache__/

@@ -1,0 +1,5 @@
+test: images/Test/test
+train: images/Train/train
+val: images/Validation/val
+names:
+  0: pole

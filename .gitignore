@@ -5,6 +5,8 @@ dataset/Poles2025/*
 !dataset/Poles2025/Road_poles_iPhone/*.yaml
 !dataset/Poles2025/Road_poles_iPhone/*.txt
 
+!dataset/Poles2025/roadpoles_v1/data.yaml
+
 .vscode
 
 __pycache__/

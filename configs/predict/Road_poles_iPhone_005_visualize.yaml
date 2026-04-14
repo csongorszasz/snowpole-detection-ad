@@ -1,0 +1,10 @@
+model: saved_runs/detect/train/weights/best.pt
+source: dataset/Poles2025/Road_poles_iPhone/images/Test/test/
+batch: 1
+imgsz: 640
+device: 0
+save_txt: true
+save_conf: true
+save_crop: true
+save: true
+visualize: true

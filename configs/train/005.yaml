@@ -1,0 +1,6 @@
+model: yolo26n.pt
+data: dataset/Poles2025/roadpoles_v1/data.yaml
+epochs: 1000
+imgsz: 640
+batch: 160
+device: 0
